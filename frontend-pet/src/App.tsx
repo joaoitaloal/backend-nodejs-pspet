@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import './App.css'
 import Submissions from './components/Submissions/Submissions'
+import type { Reading } from './lib/interfaces';
+import ListReadings from './components/ListReadings/ListReadings';
 
 function App() {
 
@@ -15,11 +18,31 @@ function App() {
 
     */
 
-  return (
-    <>
-      <Submissions/>
-    </>
-  )
+        /*
+          Se a leitura não chegar a ser tratada no backend, a estrutura dela é a seguinte:
+          int erro: 0 | 1 | 2 | 3
+          int id_prova: number | -1 (não foi possivel identificar)
+          int id_participante: number | -1
+          char* leitura: a, b, c...: o item marcado (exemplo: abbaccdeea0?), 0: questão em branco e ?: mais de uma marcação
+        */
+        const [readings, setReadings] = useState(new Array<Reading>);
+
+        function updateReadings(readings: Array<Reading>){
+          setReadings(readings); // sobrescreve, mudar se o design mudar
+        }
+  if(readings.length <= 0){
+      return (
+        <>
+          <Submissions updateReadings={updateReadings}/>
+        </>
+      )
+  }else{
+    return (
+      <>
+        <ListReadings readings={readings}/>
+      </>
+    )
+  }
 }
 
 export default App

@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import Dragzone from './Dragzone'
 import './submissions.css'
+import type { Reading } from '../../lib/interfaces';
 
-function Submissions(){
+interface SubmissionsProps{
+    updateReadings: (reading: Array<Reading>) => void;
+}
+
+function Submissions(props: SubmissionsProps){
     const [files, setFiles] = useState(new Array<File>);
     // Fazer só aceitar pdf
 
@@ -18,7 +23,15 @@ function Submissions(){
     }
 
     function submitFiles(){
+        // requisição
 
+        //resposta
+        props.updateReadings([{
+            erro: 0,
+            id_aluno: 1,
+            id_prova: 2,
+            leitura: 'abcddde??ab00ce'
+        }]);
     }
 
     return (
@@ -40,7 +53,7 @@ function Submissions(){
             </div>
 
         </div>
-            <button onClick={submitFiles} id='submit-files'>Enviar</button>
+        <button onClick={submitFiles} id='submit-files'>Enviar</button>
         </>
     )
 }

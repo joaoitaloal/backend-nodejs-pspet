@@ -1,0 +1,32 @@
+#readings-list{
+    padding: 5px;
+
+    display: flex;
+    flex-flow: row;
+
+    margin: 0px auto;
+
+    background-color: burlywood;
+    overflow-y: scroll;
+
+    width: 50%;
+    height: 90%;
+}
+
+.reading-item{
+    padding: 5px;
+
+    text-align: center;
+
+    background-color: aqua;
+
+    width: 90%;
+    height: 10%;
+    margin: 0 auto;
+}
+
+h1{
+    text-align: center;
+
+    margin: 0;
+}
