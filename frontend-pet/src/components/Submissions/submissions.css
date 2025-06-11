@@ -1,0 +1,12 @@
+#drop-zone{
+    margin: 5px auto;
+
+    background-color: burlywood;
+
+    width: 50%;
+    height: 50px;
+}
+
+.dragover{
+    background-color: gray;
+}
