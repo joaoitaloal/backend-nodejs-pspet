@@ -1,0 +1,151 @@
+#reading-grid{
+    display: grid;
+    grid-template-columns: repeat(4, calc(25% - 2px));
+    
+    height: calc(100% - 10px);
+
+    gap: 2px;
+    padding: 5px;
+}
+
+/* Leitura atual */
+#current-reading{
+    grid-column: 2/4;
+
+    padding: 5px;
+
+    background-color: cornsilk;
+}
+
+#simple-inputs{
+    display: flex;
+    flex-flow: column wrap;
+
+    padding: 5px;
+    gap: 5px;
+
+    height: 15%;
+    font-size: 1.1em;
+}
+#simple-inputs > div{
+    background-color: aliceblue;
+
+    height: calc(50% - 5px);
+}
+#simple-inputs > div > label{
+    display: block;
+
+    text-align: center;
+}
+#simple-inputs > div > input{
+    display: block;
+    font-size: 1.1em;
+
+    width: 50%;
+    margin: 0 auto;
+}
+
+#readings-inputs{
+    height: 20%;
+}
+#readings-inputs > header, #readings-inputs > p{
+    display: inline-block;
+
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#gabarito{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    background-color: wheat;
+
+    gap: 10px;
+    padding: 10px;
+
+    height: 50%;
+}
+#gabarito > div{
+    width: calc(100%/10 - 10px);
+}
+#gabarito > div > label{
+    font-size: 1.2em;
+}
+#gabarito > div > select{
+    font-size: 1.2em;
+}
+.center-item{
+    margin: auto;
+}
+
+#readings-buttons{
+    height: 10%;
+}
+#readings-buttons > button{
+    display: block;
+    margin: auto;
+
+    width: 50%;
+    height: 70%;
+}
+
+
+/* Lista de leituras */
+#readings-tab{
+    height: 100%;
+
+    background-color: blanchedalmond;
+}
+#readings-list{
+    grid-column: 4;
+
+    display: flex;
+    flex-flow: column;
+
+    height: 85%;
+
+    gap: 5px;
+    padding: 10px;
+
+    overflow-y: scroll;
+}
+.reading-item{
+    display: inline-block;
+
+    font-size: 1.2em;
+
+    width: calc(90% - 20px);
+
+    background-color: cornflowerblue;
+
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+#tab-buttons{
+    height: calc(15% - 25px);
+}
+#tab-buttons > button{
+    display: block;
+
+    margin: 5px auto;
+
+    width: 70%;
+    height: calc(33% - 5px);
+}
+
+/* Globais */
+
+h1, h2{
+    text-align: center;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5); /* Increase size */
+  margin: 10px;
+}

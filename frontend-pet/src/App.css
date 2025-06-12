@@ -1,0 +1,17 @@
+/* Header */
+#oci-header{
+    grid-column: 1;
+
+    padding: 5px;
+}
+#oci-header > img{
+    display: block;
+
+    margin: auto;
+    transform: translateX(-5%);
+
+    width: 70%;
+}
+#oci-header > h1{
+    margin: 10px auto -5px auto;
+}

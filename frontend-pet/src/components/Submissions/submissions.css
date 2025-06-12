@@ -1,10 +1,22 @@
+#submissions-grid{
+    display: grid;
+    grid-template-columns: repeat(4, calc(25% - 2px));
+    
+    height: calc(100% - 10px);
+
+    gap: 2px;
+    padding: 5px;
+}
+#submissions-wrapper{
+    grid-column: 2/4;
+}
+
 #submissions{
     margin: 0px auto;
 
     background-color: burlywood;
     overflow-y: scroll;
 
-    width: 50%;
     height: 90%;
 }
 
@@ -43,7 +55,7 @@
 #submit-files{
     display: block;
 
-    width: 50%;
+    width: 100%;
     height: 10%;
 
     font-size: 2em;

@@ -18,17 +18,19 @@ function Dragzone(props: DragzoneProps){
                         e.preventDefault();
                         handleFileUpload(e.dataTransfer.files);
                     }}
+                    onDragOver={(e) => e.preventDefault()}
                     >
 
                     Arraste e solte as imagens aqui ou clique para selecionar.
                 </div>
-            </label>
-            <input type="file" id="file-upload" name="files" multiple hidden 
+                <input type="file" id="file-upload" name="files" multiple hidden 
                 onChange={(e) =>{
                     e.preventDefault();
                     handleFileUpload(e.target.files);
                 }}
             />
+            </label>
+
         </>
     );
 }
