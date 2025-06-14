@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Dragzone from './Dragzone.tsx'
 import './submissions.css'
 import type { Reading } from '../../lib/interfaces.ts';
-import OCILogo from '/oci-logo-horizontal-color.svg';
 
 interface SubmissionsProps{
     updateReadings: (reading: Array<Reading>) => void;
@@ -63,31 +62,24 @@ function Submissions(props: SubmissionsProps){
     }
 
     return (
-        <div id='submissions-grid'>
-            <header id="oci-header">
-                <h1>Leitor de Gabaritos</h1>
-                <img src={OCILogo} alt="" />
-            </header>
-            <div id='submissions-wrapper'>
-                <div id="submissions">
-                    <Dragzone onFilesChanged={onFilesChanged}/>
-                    <div id='image-list'>
-                        {
-                            files.map((file, index) =>{
-                                return(
-                                    <div className='file-div' key={`image${index}`}>
-                                        {/*<img src={url} id={`submit-image${index}`}/> <-- Bastante trabalho, tenho que usar um filereader com promise pra ser assincrono*/}
-                                        <p>{file.name}</p>
-                                        <button onClick={() => removeFile(file)}>Remover</button>
-                                    </div>
-                            ) 
-                            })
-                        }
-                    </div>
+        <div id='submissions-wrapper'>
+            <div id="submissions">
+                <Dragzone onFilesChanged={onFilesChanged}/>
+                <div id='image-list'>
+                    {
+                        files.map((file, index) =>{
+                            return(
+                                <div className='file-div' key={`image${index}`}>
+                                    {/*<img src={url} id={`submit-image${index}`}/> <-- Bastante trabalho, tenho que usar um filereader com promise pra ser assincrono*/}
+                                    <p>{file.name}</p>
+                                    <button onClick={() => removeFile(file)}>Remover</button>
+                                </div>
+                        ) 
+                        })
+                    }
                 </div>
-            <button onClick={submitFiles} id='submit-files'>Enviar</button>
             </div>
-
+            <button onClick={submitFiles} id='submit-files'>Enviar</button>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-// Teoricamente isso só é possível ser feito no fromtend pois temos provas predefinidas, talvez seria melhor fazer isso com uma requisição pro backend
+// Isso tem que ser mudado pra uma requisição pro backend
 export function calcularNota(leitura: string, id_prova: number): number {
     const peso = 0.5;
 
@@ -26,3 +26,10 @@ export function calcularNota(leitura: string, id_prova: number): number {
 export function replaceCharAt(str: string, index: number, replacement: string): string {
   return str.slice(0, index) + replacement + str.slice(index + 1);
 }
+
+export const ID_ERROS = new Map([
+    [0, "Não houve erro"],
+    [1, "Erro de leitura do código Aztec"],
+    [2, "Imprecisão ou erro na identificação da área de leitura"],
+    [3, "Erro fatal durante a leitura"]
+]);

@@ -9,6 +9,7 @@ interface ReadingsTabProps{
 
 function ReadingsTab(props: ReadingsTabProps){
     const [selectedReadings, setSelectedReadings] = useState(new Set<Reading>);
+    const [searchText, setSearchText] = useState("");
 
     function saveSelected(){
         //salvar no banco de dados
@@ -16,9 +17,27 @@ function ReadingsTab(props: ReadingsTabProps){
 
     return(
         <div id="readings-tab"> {/* Separar isso num arquivo pra fazer state com selecionadas e tal */}
+            <div id="search-box">
+                <h2>Procurar leitura</h2>
+                <label htmlFor="search-item">ID do aluno:</label>
+                <input type="text" name="search-item" id="search-item" onChange={(e) => {
+                    // Limpar seleção                    
+                    for(let i = 0; i < props.readings.length; i++){
+                        let element = (document.getElementById(`checkbox-reading${i}`) as HTMLInputElement);
+                        if(element) element.checked = false;
+                    }
+                    setSelectedReadings(new Set<Reading>);
+
+                    setSearchText(e.target.value);
+                }}/>
+                
+            </div>
             <div id="readings-list">
             {
-                props.readings.map((reading, index) => {
+                props.readings.filter((reading) =>{
+                    if(searchText == "") return true;
+                    else return reading.id_aluno == parseInt(searchText);
+                }).map((reading, index) => {
                     return(
                         <div key={`list-item${index}`}>
                             <input type="checkbox" name="reading-check" id={`checkbox-reading${index}`} onChange={(e) => {
@@ -28,6 +47,7 @@ function ReadingsTab(props: ReadingsTabProps){
                                         return prev;
                                     })
                                 }else{
+                                    console.log('test');
                                     setSelectedReadings((prev) => {
                                         prev.delete(reading);
                                         return prev;
@@ -47,13 +67,14 @@ function ReadingsTab(props: ReadingsTabProps){
                 <button onClick={() =>{
                     for(let i = 0; i < props.readings.length; i++){
                         let element = (document.getElementById(`checkbox-reading${i}`) as HTMLInputElement);
-                        if(!element.checked) element.click();
+                        if(element && !element.checked) element.click();
                     }
                 }}>Selecionar todas</button>
                 <button onClick={saveSelected}>Salvar selecionadas no banco</button>
                 <button onClick={() =>{
                     for(let i = 0; i < props.readings.length; i++){
-                        (document.getElementById(`checkbox-reading${i}`) as HTMLInputElement).checked = false;
+                        let element = (document.getElementById(`checkbox-reading${i}`) as HTMLInputElement);
+                        if(element) element.checked = false;
                     }
 
                     props.deleteReadings(Array.from(selectedReadings));

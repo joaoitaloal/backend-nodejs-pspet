@@ -1,9 +1,8 @@
 import { useState } from "react";
 import type { Reading } from "../../lib/interfaces.ts";
 import './listreadings.css'
-import { calcularNota, replaceCharAt } from "../../lib/utils.ts";
+import { calcularNota, ID_ERROS, replaceCharAt } from "../../lib/utils.ts";
 import ReadingsTab from "./ReadingsTab.tsx";
-import OCILogo from '/oci-logo-horizontal-color.svg';
 
 interface ListReadingsProps{
     readings: Array<Reading>;
@@ -53,8 +52,8 @@ function ListReadings(props: ListReadingsProps){
                             <input type="text" id="nota-input" name="nota-input" value={curReading.nota.toFixed(1)} disabled/>
                         </div>
                         <div>
-                            <label htmlFor="error-input">Código de erro:</label>
-                            <input type="text" id="error-input" name="error-input" value={curReading.erro} disabled/>
+                            <label htmlFor="error-input">Erro:</label>
+                            <input type="text" id="error-input" name="error-input" value={curReading.erro + ' - ' + ID_ERROS.get(curReading.erro)} disabled/>
                         </div>
                     </div>
                     <div id="readings-inputs">
@@ -97,14 +96,10 @@ function ListReadings(props: ListReadingsProps){
     }
 
     return (
-        <div id="reading-grid">
-            <header id="oci-header">
-                <h1>Leitor de Gabaritos</h1>
-                <img src={OCILogo} alt="" />
-            </header>
+        <>
             <CurrentReading/>
             <ReadingsTab readings={props.readings} setCurReading={setCurReading} deleteReadings={deleteReadings}/>
-        </div>
+        </>
     )
 }
 
