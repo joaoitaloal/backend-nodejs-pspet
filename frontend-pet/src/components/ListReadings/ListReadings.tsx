@@ -57,7 +57,7 @@ function ListReadings(props: ListReadingsProps){
                         </div>
                     </div>
                     <div id="readings-inputs">
-                        <header>Gabarito:</header> <p>{curReading.leitura}</p>
+                        <h3>Gabarito: {curReading.leitura}</h3>
                         <div id="gabarito">
                             {
                                 Array.from(curReading.leitura).map((char, index) =>{

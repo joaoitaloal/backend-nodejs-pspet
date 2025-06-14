@@ -19,9 +19,10 @@ function Dragzone(props: DragzoneProps){
                         handleFileUpload(e.dataTransfer.files);
                     }}
                     onDragOver={(e) => e.preventDefault()}
-                    >
-
-                    Arraste e solte as imagens aqui ou clique para selecionar.
+                    >   
+                        {/* https://www.flaticon.com/br/icone-gratis/galeria-de-imagens_3342137*/}
+                        <img id="image-icon" src="https://cdn-icons-png.flaticon.com/512/3342/3342137.png" alt="" />
+                        <p>Arraste e solte as imagens aqui ou clique para selecionar.</p>
                 </div>
                 <input type="file" id="file-upload" name="files" multiple hidden 
                 onChange={(e) =>{

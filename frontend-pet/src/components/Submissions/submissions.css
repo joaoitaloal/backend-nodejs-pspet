@@ -5,7 +5,12 @@
 #submissions{
     margin: 0px auto;
 
-    background-color: burlywood;
+    background-color: #17132c;
+
+    border-radius: 10px;
+
+    box-shadow: 0px 0px 10px black;
+
     overflow-y: scroll;
 
     height: 90%;
@@ -15,11 +20,21 @@
     padding: 10px 0;
 
     text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
 
-    background-color: cornsilk;
+    background-color: #9BA2FF;
+
+    box-shadow: inset 0px 0px 20px black;
 
     width: 100%;
     height: 33%;
+}
+
+#image-icon{
+    display: inline-block;
+
+    width: 20%;
 }
 
 #image-list{
@@ -37,9 +52,12 @@
     text-align: center;
     overflow-wrap: anywhere;
 
-    background-color: aqua;
+    background-color: #9BA2FF;
 
-    width: calc(20% - 19px);
+    border: 1px solid white;
+    border-radius: 5px;
+
+    width: calc(20% - 20px);
     min-height: calc(20% - 19px);
 }
 
@@ -52,4 +70,34 @@
     font-size: 2em;
 
     margin: 0 auto;
+    
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+
+    cursor: pointer;
+}
+#submit-files:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
+}
+
+.file-div > button{
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+.file-div > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 2px white;
 }

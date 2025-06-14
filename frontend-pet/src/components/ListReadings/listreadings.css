@@ -4,7 +4,19 @@
 
     padding: 5px;
 
-    background-color: cornsilk;
+    background-color: #17132c;
+    color: white;
+    
+    border-radius: 10px;
+    border: 1px solid black;
+
+    box-shadow: 0px 0px 10px black;
+}
+#current-reading > h2, #readings-inputs > h3{
+    text-align: center;
+
+    background-color: transparent;
+    background-image: linear-gradient(to right, transparent, black, transparent);
 }
 
 #simple-inputs{
@@ -18,9 +30,15 @@
     font-size: 1.1em;
 }
 #simple-inputs > div{
-    background-color: aliceblue;
+    background-color: #9BA2FF;
+    color: black;
 
-    height: calc(50% - 5px);
+    border-radius: 15px;
+    border: 1px solid white;
+
+    box-shadow: 0px 0px 5px black;
+
+    height: calc(50% - 15px);
 }
 #simple-inputs > div > label{
     display: block;
@@ -53,7 +71,12 @@
     flex-flow: row wrap;
     justify-content: center;
 
-    background-color: wheat;
+    background-color: #17132c;
+
+    border: 1px solid white;
+    border-radius: 15px;
+    
+    box-shadow: 2px 2px 10px black;
 
     gap: 10px;
     padding: 10px;
@@ -70,6 +93,10 @@
 .center-item{
     margin: auto;
 }
+.center-item > select{
+    background-color: black;
+    color: white;
+}
 
 #readings-buttons{
     height: 10%;
@@ -82,6 +109,19 @@
 
     width: 50%;
     height: 70%;
+
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+#readings-buttons > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
 }
 
 
@@ -91,11 +131,22 @@
 
     text-align: center;
 }
+#search-box > input{
+    background-color: black;
+    color: white;
+}
 
 #readings-tab{
     grid-column: 4;
 
-    background-color: blanchedalmond;
+    background-color: #17132c;
+
+    color: white;
+
+    border-radius: 10px;
+    border: 1px solid black;
+
+    box-shadow: 0px 0px 10px black;
 }
 #readings-list{
     display: flex;
@@ -103,7 +154,7 @@
 
     height: calc(75% - 10px);
 
-    gap: 5px;
+    gap: 10px;
     padding: 10px;
 
     overflow-y: scroll;
@@ -112,16 +163,27 @@
     display: inline-block;
 
     font-size: 1.2em;
+    font-weight: bold;
 
     width: calc(90% - 20px);
 
-    background-color: cornflowerblue;
+    background-color: #9BA2FF;
+    color: black;
 
     margin: 0 auto;
     padding: 5px;
-    border-radius: 5px;
+
+    border-radius: 15px;    
+    border: 1px solid white;
+
+    box-shadow: 1px 1px 5px black;
 
     cursor: pointer;
+}
+.reading-item:hover{
+    background-color: #444772;
+
+    color: rgb(133, 133, 133)
 }
 
 #tab-buttons{
@@ -134,6 +196,19 @@
 
     width: 70%;
     height: calc(33% - 5px);
+
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+#tab-buttons > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
 }
 
 /* Globais */
@@ -142,7 +217,23 @@ h1, h2{
     text-align: center;
 }
 
-input[type="checkbox"] {
-  transform: scale(1.5); /* Increase size */
-  margin: 10px;
+input[type="checkbox"]{
+    transform: scale(1.5);
+    margin: 10px;
+}
+
+input[type="text"]{
+    background-color: #17132c;
+    color: white;
+
+    border: 1px solid white;
+    border-radius: 10px;
+
+    text-indent: 5px;
+}
+
+input:disabled{
+    background-color: #22202c;
+
+    cursor: not-allowed;
 }

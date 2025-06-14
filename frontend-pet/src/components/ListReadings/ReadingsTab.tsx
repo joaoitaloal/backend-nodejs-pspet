@@ -47,7 +47,6 @@ function ReadingsTab(props: ReadingsTabProps){
                                         return prev;
                                     })
                                 }else{
-                                    console.log('test');
                                     setSelectedReadings((prev) => {
                                         prev.delete(reading);
                                         return prev;
