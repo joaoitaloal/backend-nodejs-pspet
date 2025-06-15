@@ -27,11 +27,19 @@ const port = 3000;
 // Armazena uploads em memória (RAM)
 const upload = multer({ storage: multer.memoryStorage() })
 
+app.use(express.static('./dist'));
+
+app.use(express.json());
+
 function processarImagem(buffer, originalname) { //função q recebe um buffer e o nome da imagem e retorna o json processado
   const ext = extname(originalname);
   const resultado = lib.readImageData(ext, buffer, buffer.length);
   return resultado;
 }
+
+app.get('/', (req, res) =>{
+    res.sendfile( './dist/index.html');
+})
 
 // Rota que recebe várias imagens
 app.post('/processar-varias', upload.array('imagens'), (req, res) => {
@@ -51,7 +59,7 @@ app.post('/processar-varias', upload.array('imagens'), (req, res) => {
     }
 });
 
-// Rota para processar imagem a partir do path 
+// Rota para processar imagem a partir do path
 app.post('/processar-path', async (req, res) => {
   try {
     const { caminho } = req.body;
@@ -70,11 +78,11 @@ app.post('/processar-path', async (req, res) => {
 });
 
 app.post('/avaliar',async(req,res) =>{
-  //recebe o id da prova e as respostas 
+  //recebe o id da prova e as respostas   
   //exemplo de corpo da requisição:
   //      id_participante: 12345,
   //      gabarito: "abcdeabcdeabcde",
-  //      leitura:    "abddeab?eabcde"
+  //      leitura:  "abddeab?deabcde"
 
 
       const { id_prova,id_participante,leitura } = req.body;
@@ -89,7 +97,7 @@ if (!gabarito) {
   for(let i =0;i<gabarito.length && i<leitura.length;i++){
     if(gabarito[i] === leitura[i]) acertos++;
   }
-  const nota = (acertos / gabarito.length);
+  const nota = (acertos / gabarito.length) * 10;
   //agora,falta salvar no banco de dados, passando arquivo, o id_participante,id prova,o erro, a  leitura, os acertos e a nota
  res.json({
     id_prova,
@@ -100,6 +108,10 @@ if (!gabarito) {
   });
 })
 //TODO:fazer endpoint para retornar tabela do banco de dados 
+
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
+});
 
 export default app;
 
