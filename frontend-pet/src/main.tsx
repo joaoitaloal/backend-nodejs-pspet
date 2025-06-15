@@ -1,9 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './globalstyles/index.css'
 import App from './App.tsx'
 import { createBrowserRouter, Link, RouterProvider } from 'react-router'
 import NavBar from './components/NavBar/NavBar.tsx'
+import Leituras from './pages/leituras/Leituras.tsx'
+import Alunos from './pages/alunos/Alunos.tsx'
+import Provas from './pages/provas/Provas.tsx'
 
 const router = createBrowserRouter([
     {
@@ -12,8 +15,20 @@ const router = createBrowserRouter([
         element: <NavBar/>,
         children: [
             {
-                path: "",
-                element: <App/>
+              path: "",
+              element: <App/>
+            },
+            {
+              path: "leituras",
+              element: <Leituras/>
+            },
+            {
+              path: "alunos",
+              element: <Alunos/>
+            },
+            {
+              path: "provas",
+              element: <Provas/>
             }
         ]
     }

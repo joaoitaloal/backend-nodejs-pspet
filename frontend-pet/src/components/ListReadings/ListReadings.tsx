@@ -35,9 +35,9 @@ function ListReadings(props: ListReadingsProps){
                     <div id="simple-inputs">
                         <div>
                             <label htmlFor="id-aluno-input">ID Aluno:</label>
-                            <input type="text" id="id-aluno-input" name="id-aluno-input" defaultValue={curReading.id_aluno} onChange={(e) => {
+                            <input type="text" id="id-aluno-input" name="id-aluno-input" defaultValue={curReading.id} onChange={(e) => {
                                 e.target.value = e.target.value.replace(/[^0-9]/gi, ''); // só numeros, não usei um input do tipo number porque ele não é tão intuitivo de usar nesse caso
-                                tempReading.id_aluno = parseInt(e.target.value);
+                                tempReading.id = parseInt(e.target.value);
                             }}/>
                         </div>
                         <div>
@@ -92,7 +92,7 @@ function ListReadings(props: ListReadingsProps){
                 </div>
             )
         }
-        else return <div id="current-reading"></div>;
+        else return <div id="current-reading"><p>Nenhuma leitura carregada.</p></div>;
     }
 
     return (

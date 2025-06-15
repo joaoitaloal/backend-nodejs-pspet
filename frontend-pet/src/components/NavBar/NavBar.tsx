@@ -17,9 +17,9 @@ function NavBar(){
                     </div>
                     <div id="nav-visual-div">
                         <h2>Visualizar no banco de dados:</h2>
-                        <Link to={''}><div className="nav-button"><p>Leituras</p></div></Link>
-                        <Link to={''}><div className="nav-button"><p>Alunos</p></div></Link>
-                        <Link to={''}><div className="nav-button"><p>Provas</p></div></Link>
+                        <Link to={'leituras'}><div className="nav-button"><p>Leituras</p></div></Link>
+                        <Link to={'alunos'}><div className="nav-button"><p>Alunos</p></div></Link>
+                        <Link to={'provas'}><div className="nav-button"><p>Provas</p></div></Link>
                     </div>
                 </nav>
             </div>

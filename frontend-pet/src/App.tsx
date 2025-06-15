@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import Submissions from './components/Submissions/Submissions.tsx'
 import type { Reading } from './lib/interfaces.ts';
 import ListReadings from './components/ListReadings/ListReadings.tsx';
@@ -25,10 +24,6 @@ function App() {
         float nota: number
         char* leitura: a, b, c...: o item marcado (exemplo: abbaccdeea0?), 0: questão em branco e ?: mais de uma marcação
     */
-
-    //  Página de enviar fotos e receber resposta tá pronta,
-    //  falta a página de mostrar tabelas do banco, pra ela acho que seria uma boa ideia usar o react-router, pra organizar bonitinho.
-    //  Aí teria que criar uma barra de navegação na esquerda, e mudar a header pra lá.
 
     const [readings, setReadings] = useState(new Array<Reading>);
 

@@ -1,0 +1,239 @@
+/* Leitura atual */
+#current-reading{
+    grid-column: 2/4;
+
+    padding: 5px;
+
+    background-color: #17132c;
+    color: white;
+    
+    border-radius: 10px;
+    border: 1px solid black;
+
+    box-shadow: 0px 0px 10px black;
+}
+#current-reading > h2, #readings-inputs > h3{
+    text-align: center;
+
+    background-color: transparent;
+    background-image: linear-gradient(to right, transparent, black, transparent);
+}
+
+#simple-inputs{
+    display: flex;
+    flex-flow: column wrap;
+
+    padding: 5px;
+    gap: 5px;
+
+    height: 15%;
+    font-size: 1.1em;
+}
+#simple-inputs > div{
+    background-color: #9BA2FF;
+    color: black;
+
+    border-radius: 15px;
+    border: 1px solid white;
+
+    box-shadow: 0px 0px 5px black;
+
+    height: calc(50% - 15px);
+}
+#simple-inputs > div > label{
+    display: block;
+
+    text-align: center;
+}
+#simple-inputs > div > input{
+    display: block;
+    font-size: 1.1em;
+
+    margin: 0 auto;
+}
+
+#error-input{
+    width: 90%;
+}
+
+#readings-inputs{
+    height: fit-content;
+}
+#readings-inputs > header, #readings-inputs > p{
+    display: inline-block;
+
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#gabarito{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+
+    background-color: #17132c;
+
+    border: 1px solid white;
+    border-radius: 15px;
+    
+    box-shadow: 2px 2px 10px black;
+
+    gap: 10px;
+    padding: 10px;
+}
+#gabarito > div{
+    width: calc(100%/10 - 10px);
+}
+#gabarito > div > label{
+    font-size: 1.2em;
+}
+#gabarito > div > select{
+    font-size: 1.2em;
+}
+.center-item{
+    margin: auto;
+}
+.center-item > select{
+    background-color: black;
+    color: white;
+}
+
+#readings-buttons{
+    height: 10%;
+
+    margin-top: 10px;
+}
+#readings-buttons > button{
+    display: block;
+    margin: auto;
+
+    width: 50%;
+    height: 70%;
+
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+#readings-buttons > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
+}
+
+
+/* Lista de leituras */
+#search-box{
+    height: calc(10% - 10px);
+
+    text-align: center;
+}
+#search-box > input{
+    background-color: black;
+    color: white;
+}
+
+#readings-tab{
+    grid-column: 4;
+
+    background-color: #17132c;
+
+    color: white;
+
+    border-radius: 10px;
+    border: 1px solid black;
+
+    box-shadow: 0px 0px 10px black;
+}
+#readings-list{
+    display: flex;
+    flex-flow: column;
+
+    height: calc(75% - 10px);
+
+    gap: 10px;
+    padding: 10px;
+
+    overflow-y: scroll;
+}
+.reading-item{
+    display: inline-block;
+
+    font-size: 1.2em;
+    font-weight: bold;
+
+    width: calc(90% - 20px);
+
+    background-color: #9BA2FF;
+    color: black;
+
+    margin: 0 auto;
+    padding: 5px;
+
+    border-radius: 15px;    
+    border: 1px solid white;
+
+    box-shadow: 1px 1px 5px black;
+
+    cursor: pointer;
+}
+.reading-item:hover{
+    background-color: #444772;
+
+    color: rgb(133, 133, 133)
+}
+
+#tab-buttons{
+    height: calc(15% - 25px);
+}
+#tab-buttons > button{
+    display: block;
+
+    margin: 5px auto;
+
+    width: 70%;
+    height: calc(33% - 5px);
+
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+#tab-buttons > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
+}
+
+/* Globais */
+
+h1, h2{
+    text-align: center;
+}
+
+input[type="checkbox"]{
+    transform: scale(1.5);
+    margin: 10px;
+}
+
+input[type="text"]{
+    background-color: #17132c;
+    color: white;
+
+    border: 1px solid white;
+    border-radius: 10px;
+
+    text-indent: 5px;
+}
+
+input:disabled{
+    background-color: #22202c;
+
+    cursor: not-allowed;
+}

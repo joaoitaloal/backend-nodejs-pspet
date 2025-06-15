@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Dragzone from './Dragzone.tsx'
 import './submissions.css'
 import type { Reading } from '../../lib/interfaces.ts';
+import axios from 'axios';
 
 interface SubmissionsProps{
     updateReadings: (reading: Array<Reading>) => void;
@@ -23,12 +24,17 @@ function Submissions(props: SubmissionsProps){
     }
 
     function submitFiles(){
-        // requisição
+        let formData = new FormData();
+        files.forEach((file) => formData.append('imagem', file))
 
-        //resposta
-        props.updateReadings([{
+        axios.post('/processar-varias', formData)
+        .then((res) =>{
+            props.updateReadings(res.data.leituras);
+        })
+
+        /*props.updateReadings([{ testing
             erro: 2,
-            id_aluno: 1,
+            id: 1,
             id_prova: 6,
             nota: 1,
             leitura: 'a0bedabdbcc0eebacbca',
@@ -36,7 +42,7 @@ function Submissions(props: SubmissionsProps){
         },
         {
             erro: 0,
-            id_aluno: 3,
+            id: 3,
             id_prova: 3,
             nota: 2.5,
             leitura: '?0d?0ecaaccaacdecaca',
@@ -44,7 +50,7 @@ function Submissions(props: SubmissionsProps){
         },
         {
             erro: 0,
-            id_aluno: 3,
+            id: 3,
             id_prova: 3,
             nota: 2.5,
             leitura: '?0d?0ecaaccaacdecaca',
@@ -52,13 +58,13 @@ function Submissions(props: SubmissionsProps){
         },
         {
             erro: 0,
-            id_aluno: 3,
+            id: 3,
             id_prova: 3,
             nota: 2.5,
             leitura: '?0d?0ecaaccaacdecaca',
             image_url: '0009.png'
         }
-        ]);
+        ]);*/
     }
 
     return (
