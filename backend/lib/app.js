@@ -2,6 +2,12 @@ import express from 'express';
 import multer from 'multer'
 import { extname } from 'path';
 
+import {select_resultados, select_provas, select_participantes,
+        delete_participante, delete_prova, delete_resultado, insert_participante,
+        insert_prova, insert_resultado, update_participante, update_prova,
+        update_resultado} from "../Functions/functions.js"
+
+//import {insert_participante} from "../Functions/functions.js"
 const gabarito1 = 'eaedddccaedacbbcbacb';
 const gabarito2 = 'bdbbacbbaeececddbdcd';
 const gabarito3 = 'abecadcbbcedccabccda';
@@ -40,6 +46,169 @@ function processarImagem(buffer, originalname) { //função q recebe um buffer e
 app.get('/', (req, res) =>{
     res.sendfile( './dist/index.html');
 })
+
+
+app.post('/participantes', async (req, res) => {
+  try {
+    const { ID_ALUNO, NOME, ESCOLA } = req.body;
+    
+    if (!ID_ALUNO || !NOME || !ESCOLA) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await insert_participante(ID_ALUNO, NOME, ESCOLA);
+    res.status(201).json({ message: 'Participante adicionado com sucesso' });
+
+  } catch (error) {
+    console.error('Erro ao adicionar participante:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.post('/resultados', async (req, res) => {
+  try {
+    const { URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA } = req.body;
+    
+    if (!ID_ALUNO || !ID_PROVA || !URL || !ERRO || !ACERTOS || !NOTA) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await insert_resultado(URL || null, ERRO || null, ID_ALUNO, ID_PROVA, ACERTOS, NOTA);
+    res.status(201).json({ message: 'Resultado adicionado com sucesso' });
+
+  } catch (error) {
+    console.error('Erro ao adicionar resultado:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.post('/provas', async (req, res) => {
+  try {
+    const { ID_PROVA, GABARITO } = req.body;
+    
+    if (!ID_PROVA || !GABARITO) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await insert_prova(ID_PROVA, GABARITO);
+    res.status(201).json({ message: 'Prova adicionada com sucesso' });
+
+  } catch (error) {
+    console.error('Erro ao adicionar prova:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.put('/participantes/:id_aluno', async (req, res) => {
+  try {
+    const { id_aluno } = req.params;
+    const { NOME, ESCOLA } = req.body;
+    
+    if (!NOME || !ESCOLA) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await update_participante(id_aluno, NOME, ESCOLA);
+    res.json({ message: 'Participante atualizado com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'PARTICIPANTE_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao atualizar participante:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.put('/resultados/:id_aluno/:id_prova', async (req, res) => {
+  try {
+    const { id_aluno, id_prova } = req.params;
+    const { URL, ERRO, ACERTOS, NOTA } = req.body;
+    
+    if (!URL||!ERRO ||!ACERTOS || !NOTA) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await update_resultado(URL || null, ERRO || null, id_aluno, id_prova, ACERTOS, NOTA);
+    res.json({ message: 'Resultado atualizado com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'RESULTADO_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao atualizar resultado:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.put('/provas/:id_prova', async (req, res) => {
+  try {
+    const { id_prova } = req.params;
+    const { GABARITO } = req.body;
+    
+    if (!GABARITO || !id_prova) {
+      return res.status(400).json({ error: 'Bad Request: Campos faltando' });
+    }
+
+    await update_prova(id_prova, GABARITO);
+    res.json({ message: 'Prova atualizada com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'PROVA_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao atualizar prova:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.delete('/participantes/:id_aluno', async (req, res) => {
+  try {
+    const { id_aluno } = req.params;
+    
+    await delete_participante(id_aluno);
+    res.json({ message: 'Participante removido com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'PARTICIPANTE_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao remover participante:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.delete('/resultados/:id_aluno', async (req, res) => {
+  try {
+    const { id_aluno } = req.params;
+    
+    await delete_resultado(id_aluno);
+    res.json({ message: 'Resultado removido com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'RESULTADO_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao remover resultado:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+app.delete('/provas/:id_prova', async (req, res) => {
+  try {
+    const { id_prova } = req.params;
+    
+    await delete_prova(id_prova);
+    res.json({ message: 'Prova removida com sucesso' });
+
+  } catch (error) {
+    if (error.code === 'PROVA_NOT_FOUND') {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error('Erro ao remover prova:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 
 // Rota que recebe várias imagens
 app.post('/processar-varias', upload.array('imagens'), (req, res) => {
@@ -106,6 +275,7 @@ if (!gabarito) {
     acertos,
     nota
   });
+  
 })
 //TODO:fazer endpoint para retornar tabela do banco de dados 
 
