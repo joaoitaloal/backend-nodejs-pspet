@@ -6,8 +6,11 @@ import {select_resultados, select_provas, select_participantes,
         delete_participante, delete_prova, delete_resultado, insert_participante,
         insert_prova, insert_resultado, update_participante, update_prova,
         update_resultado} from "../Functions/functions.js"
+import ffi from 'ffi-napi';
+import ref from 'ref-napi';
 
-//import {insert_participante} from "../Functions/functions.js"
+import lib from './server.js';
+
 const gabarito1 = 'eaedddccaedacbbcbacb';
 const gabarito2 = 'bdbbacbbaeececddbdcd';
 const gabarito3 = 'abecadcbbcedccabccda';
@@ -39,7 +42,7 @@ app.use(express.json());
 
 function processarImagem(buffer, originalname) { //função q recebe um buffer e o nome da imagem e retorna o json processado
   const ext = extname(originalname);
-  const resultado = lib.readImageData(ext, buffer, buffer.length);
+  const resultado = lib.read_image_data(ext, buffer, buffer.length);
   return resultado;
 }
 
@@ -237,7 +240,7 @@ app.post('/processar-path', async (req, res) => {
     }
 
     // Chama o wrapper ReadImagePath
-    const leitura = lib.readImagePath(caminho);
+    const leitura = lib.readimage_path(caminho);
     res.json({ leitura });
 
   } catch (err) {
