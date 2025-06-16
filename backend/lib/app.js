@@ -122,8 +122,6 @@ app.post('/api/processar-imagens', upload.array('imagens'), async (req, res) =>{
     })
   })
 
-  //console.log(`response `+response)
-
   res.json({ message: response });
 
   //opcionalmente limpar as imagens do disco aqui
@@ -185,7 +183,7 @@ app.post('/api/resultados', async (req, res) => {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await insert_resultado(IMAGE_URL || null, ERRO || null, ID_ALUNO, ID_PROVA, ACERTOS, NOTA);
+    await insert_resultado(IMAGE_URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA);
     res.status(201).json({ message: 'Resultado adicionado com sucesso' });
 
   } catch (error) {
@@ -241,7 +239,7 @@ app.put('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await update_resultado(URL || null, ERRO || null, id_aluno, id_prova, ACERTOS, NOTA);
+    await update_resultado(URL, ERRO, id_aluno, id_prova, ACERTOS, NOTA);
     res.json({ message: 'Resultado atualizado com sucesso' });
 
   } catch (error) {
@@ -257,7 +255,6 @@ app.put('/api/provas/:id_prova', async (req, res) => {
   try {
     const { id_prova } = req.params;
     const GABARITO = req.body.data.GABARITO;
-    console.log(id_prova, GABARITO, req.body.data);
     
     if (!GABARITO || !id_prova) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
