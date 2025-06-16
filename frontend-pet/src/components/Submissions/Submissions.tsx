@@ -25,9 +25,9 @@ function Submissions(props: SubmissionsProps){
 
     function submitFiles(){
         let formData = new FormData();
-        files.forEach((file) => formData.append('imagem', file))
+        files.forEach((file) => formData.append('imagens', file))
 
-        axios.post('/processar-varias', formData)
+        axios.post('/api/processar-imagens', formData)
         .then((res) =>{
             props.updateReadings(res.data.leituras);
         })

@@ -1,15 +1,16 @@
 import express from 'express';
 import multer from 'multer'
+import fsp from 'fs/promises'
 import { extname } from 'path';
+
+import { promisify } from 'util';
+import { exec } from 'child_process';
 
 import {select_resultados, select_provas, select_participantes,
         delete_participante, delete_prova, delete_resultado, insert_participante,
         insert_prova, insert_resultado, update_participante, update_prova,
         update_resultado} from "../Functions/functions.js"
-import ffi from 'ffi-napi';
-import ref from 'ref-napi';
 
-import lib from './server.js';
 
 const gabarito1 = 'eaedddccaedacbbcbacb';
 const gabarito2 = 'bdbbacbbaeececddbdcd';
@@ -27,8 +28,9 @@ const gabaritos = {
   '6': gabarito6
 };// objeto para armazenar os gabaritos de cada prova
 
+let cur_id_imagem = 0;
+
 const app = express();
-const port = 3000;
 //GET = puxar valor
 //POST = COLOCAR VALOR
 //DELETE = DELETE
@@ -48,6 +50,38 @@ function processarImagem(buffer, originalname) { //função q recebe um buffer e
 
 app.get('/', (req, res) =>{
     res.sendFile( './dist/index.html');
+})
+
+const execFilePromisse = promisify(exec);
+app.post('/api/processar-imagens', upload.array('imagens'), (req, res) =>{
+  let files = req.files;
+  if(files == null || files == undefined) res.status(400).send('Requisição mal formatada');
+
+  let response = [];
+
+  files.forEach((file) =>{
+    cur_id_imagem++;
+    let id = cur_id_imagem;
+    let pathProcessamento = './lib/processamento'; // caminho pra processamento.cpp compilado
+    let pathImage = './imagens/imagem'+id+'.png'; // caminho pra imagem
+
+    // Basicamente salva cada imagem em disco, chama o programa pra ler ela e manda o stdout como resposta(num array)
+    fsp.writeFile(pathImage, Buffer.from(file.buffer))
+    .then(() =>{
+      execFilePromisse(`cd ${pathProcessamento} && ./processamento ../../${pathImage}`)
+      .then((result) => {
+        response.push(JSON.parse(result.stdout));
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+    })
+    .catch((err) => console.log(err));
+  })
+
+  res.json({ message: response });
+
+  //opcionalmente limpar as imagens do disco aqui
 })
 
 app.get('/api/participantes', async (req, res) =>{
@@ -313,46 +347,3 @@ if (!gabarito) {
 })
 
 export default app;
-
-
-
-
-/* 
-Explicando algumas questões de sintaxe do javascript e express
-    As funçôes app.post(), app.put(), app.get app recebe dois(ou mais) argumentos, 
-        o primeiro é a url da requisição
-        o ultimo costuma ser uma função que gerência a requisição de fato, dá pra criar uma função separada e tal mas é mais comum fazer isso com funções anônimas
-        no meio é possível passar um(ou mais) middleware para processar a requisição, no exemplo abaixo tem um middleware pra processar o json da requisição 
-
-    Função anonima no JS
-        São basicamente funções normais mas sem nome, são basicamente funções que você sabe que não vai precisar usar mais de uma vez
-        No exemplo de app.post() abaixo o ultimo argumento passado é uma função anonima, a sintaxe é a seguinte:
-            (numero) => {
-                console.log(numero + 1); 
-            }
-            isso é equivalente a escrever
-            function somarUm(numero){
-                console.log(numero + 1);
-            }
-        Porém no caso do app.post() a função anonima recebe os parametros (req, res), que são respectivamente os objetos que representam a requisição e a resposta
-
-app.post('/api/message', bodyParser.json(), (req, res) => { // Exemplo de requisição que recebe uma mensagem JSON qualquer
-    if(req.headers['content-length'] > 1000){
-        res.send('Sua mensagem é muito grande, o limite é 1000 caracteres')
-    }else{
-        console.log(req.body.message);
-        res.send("mensagem recebida!")
-    }
-})
-
-app.put('/api/update-visit', (req, res) => { // Exemplo de requisição que não recebe nada, só atualiza uma informação
-    visits+=1;
-    res.send("atualizado, visitas atuais: "+visits);
-    console.log("visits: "+visits);
-})
-
-app.get('/', (req,res) => { // Enviar a página de frontend
-    res.sendFile('index.html' , {root: path.join('dist')})
-})
-
-export default app;*/
