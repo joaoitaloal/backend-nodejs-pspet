@@ -5,18 +5,19 @@ import ListAlunos from "./ListAlunos";
 
 function Alunos(){
     const [alunos, setAlunos] = useState(new Array<Aluno>);
-    const [warning, setWarning] = useState("Carregando tabela do banco de dados...");
+    const [warning, setWarning] = useState("Carregando tabela dadaso banco de dados...");
 
     useEffect(() =>{
         axios.request({
             method: 'get',
-            url: '/api/get-alunos',
+            url: '/api/participantes',
         })
         .then((res) =>{
-            let newAlunos = res.data.alunos; //creio que isso já vai ser um array
-            setAlunos(newAlunos);
+            let newProvas = res.data.message; //creio que isso já vai ser um array
+            if(newProvas.length <= 0) setWarning('Nenhum registro encontrado no banco de dados')
+            else setAlunos(newProvas);
         })
-        .catch((err) =>{ setWarning(err) })
+        .catch((err) =>{ console.log(err) })
     }, []);
 
     function updateAlunos(newAluno: Array<Aluno>){
@@ -27,7 +28,11 @@ function Alunos(){
 
         if(alunos == undefined || !alunos || alunos.length <= 0){
             return (
-                <p>{warning}</p>
+                <div>
+                    <p>{warning}</p>
+                    <button onClick={() => updateAlunos([{ESCOLA: "", NOME: "", ID_ALUNO: 0} as Aluno])}>Adicionar aluno localmente</button>
+                </div>
+                
             )
         }else{
             return (

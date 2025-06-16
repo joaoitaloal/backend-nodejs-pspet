@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { Reading } from "../../lib/interfaces.ts";
 import './listreadings.css'
-import { calcularNota, ID_ERROS, replaceCharAt } from "../../lib/utils.ts";
+import { ID_ERROS, replaceCharAt } from "../../lib/utils.ts";
 import ReadingsTab from "./ReadingsTab.tsx";
+import axios from "axios";
 
 interface ListReadingsProps{
     readings: Array<Reading>;
@@ -31,40 +32,40 @@ function ListReadings(props: ListReadingsProps){
         if(curReading != undefined){
             return(
                 <div id="current-reading">
-                    <h2>Leitura {curReading.image_url}</h2>
+                    <h2>Leitura {curReading.IMAGE_URL}</h2>
                     <div id="simple-inputs">
                         <div>
                             <label htmlFor="id-aluno-input">ID Aluno:</label>
-                            <input type="text" id="id-aluno-input" name="id-aluno-input" defaultValue={curReading.id} onChange={(e) => {
+                            <input type="text" id="id-aluno-input" name="id-aluno-input" defaultValue={curReading.ID_ALUNO} onChange={(e) => {
                                 e.target.value = e.target.value.replace(/[^0-9]/gi, ''); // só numeros, não usei um input do tipo number porque ele não é tão intuitivo de usar nesse caso
-                                tempReading.id = parseInt(e.target.value);
+                                tempReading.ID_ALUNO = parseInt(e.target.value);
                             }}/>
                         </div>
                         <div>
                             <label htmlFor="id-prova-input">ID Prova:</label>
-                            <input type="text" id="id-prova-input" name="id-prova-input" defaultValue={curReading.id_prova} onChange={(e) => {
+                            <input type="text" id="id-prova-input" name="id-prova-input" defaultValue={curReading.ID_PROVA} onChange={(e) => {
                                 e.target.value = e.target.value.replace(/[^0-9]/gi, '');
-                                tempReading.id_prova = parseInt(e.target.value);
+                                tempReading.ID_PROVA = parseInt(e.target.value);
                             }}/>
                         </div>
                         <div>
                             <label htmlFor="nota-input">Nota:</label>
-                            <input type="text" id="nota-input" name="nota-input" value={curReading.nota.toFixed(1)} disabled/>
+                            <input type="text" id="nota-input" name="nota-input" value={curReading.NOTA.toFixed(1)} disabled/>
                         </div>
                         <div>
                             <label htmlFor="error-input">Erro:</label>
-                            <input type="text" id="error-input" name="error-input" value={curReading.erro + ' - ' + ID_ERROS.get(curReading.erro)} disabled/>
+                            <input type="text" id="error-input" name="error-input" value={curReading.ERRO + ' - ' + ID_ERROS.get(curReading.ERRO)} disabled/>
                         </div>
                     </div>
                     <div id="readings-inputs">
-                        <h3>Gabarito: {curReading.leitura}</h3>
+                        <h3>Gabarito: {curReading.LEITURA}</h3>
                         <div id="gabarito">
                             {
-                                Array.from(curReading.leitura).map((char, index) =>{
+                                Array.from(curReading.LEITURA).map((char, index) =>{
                                     return(
                                         <div className="center-item" key={`item${index+1}`}>
                                             <label htmlFor={`choice${index+1}`}>{index+1 < 10?'0'+(index+1):index+1}</label>
-                                            <select id={`choice${index+1}`} name={`choice${index+1}`} defaultValue={char} onChange={(e) => (tempReading.leitura = replaceCharAt(tempReading.leitura, index, e.target.value))}>
+                                            <select id={`choice${index+1}`} name={`choice${index+1}`} defaultValue={char} onChange={(e) => (tempReading.LEITURA = replaceCharAt(tempReading.LEITURA, index, e.target.value))}>
                                                 <option value="a">a</option>
                                                 <option value="b">b</option>
                                                 <option value="c">c</option>
@@ -81,12 +82,20 @@ function ListReadings(props: ListReadingsProps){
                     </div>
                     <div id="readings-buttons">
                             <button type="submit" onClick={() => {
-                                tempReading.nota = calcularNota(tempReading.leitura, tempReading.id_prova);
+                                axios.post('/avaliar', {
+                                    id_prova: tempReading.ID_PROVA,
+                                    id_participante: tempReading.ID_ALUNO,
+                                    leitura: tempReading.LEITURA
+                                })
+                                .then((res) =>{
+                                    tempReading.NOTA = res.data.nota;
 
-                                props.readings[props.readings.indexOf(curReading)] = tempReading;
+                                    props.readings[props.readings.indexOf(curReading)] = tempReading;
 
-                                setCurReading(tempReading);
-                                props.updateReadings(props.readings);
+                                    setCurReading(tempReading);
+                                    props.updateReadings(props.readings);
+                                })
+                                .catch((err) => console.log(err));
                             }}>Salvar localmente</button>
                     </div>
                 </div>

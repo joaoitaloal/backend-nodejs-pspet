@@ -10,13 +10,14 @@ function Leituras(){
     useEffect(() =>{
         axios.request({
             method: 'get',
-            url: '/api/get-leituras',
+            url: '/api/resultados',
         })
         .then((res) =>{
-            let newLeituras = res.data.leituras; //creio que isso já vai ser um array
-            setReadings(newLeituras);
+            let newProvas = res.data.message; //creio que isso já vai ser um array
+            if(newProvas.length <= 0) setWarning('Nenhum registro encontrado no banco de dados')
+            else setReadings(newProvas)
         })
-        .catch((err) =>{ setWarning(err) })
+        .catch((err) =>{ console.log(err) })
     }, []);
 
     function updateReadings(newReadings: Array<Reading>){
@@ -27,7 +28,10 @@ function Leituras(){
 
         if(readings == undefined || !readings || readings.length <= 0){
             return (
-                <p>{warning}</p>
+                <div>
+                    <p>{warning}</p>
+                    <button onClick={() => updateReadings([{ACERTOS: 0, ERRO: 0, ID_ALUNO: 0, ID_PROVA: 0, IMAGE_URL: "", LEITURA: '000000000000000000000', NOTA: 0} as Reading])}>Adicionar leitura localmente</button>
+                </div>
             )
         }else{
             return (

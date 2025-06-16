@@ -44,13 +44,43 @@ function processarImagem(buffer, originalname) { //função q recebe um buffer e
 }
 
 app.get('/', (req, res) =>{
-    res.sendfile( './dist/index.html');
+    res.sendFile( './dist/index.html');
+})
+
+app.get('/api/participantes', async (req, res) =>{
+  try{
+    let alunos = await select_participantes();
+    res.json( { message: Array.from(alunos) } )
+  }catch{
+    console.error('Erro ao listar participantes:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+})
+
+app.get('/api/resultados', async (req, res) =>{
+  try{
+    let resultados = await select_resultados();
+    res.json( { message: Array.from(resultados) } )
+  }catch{
+    console.error('Erro ao listar resultados:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+})
+
+app.get('/api/provas', async (req, res) =>{
+  try{
+    let provas = await select_provas();
+    res.json( { message: Array.from(provas) } )
+  }catch{
+    console.error('Erro ao listar provas:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 })
 
 
-app.post('/participantes', async (req, res) => {
+app.post('/api/participantes', async (req, res) => {
   try {
-    const { ID_ALUNO, NOME, ESCOLA } = req.body;
+    const { ID_ALUNO, NOME, ESCOLA } = req.body.data;
     
     if (!ID_ALUNO || !NOME || !ESCOLA) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -65,9 +95,9 @@ app.post('/participantes', async (req, res) => {
   }
 });
 
-app.post('/resultados', async (req, res) => {
+app.post('/api/resultados', async (req, res) => {
   try {
-    const { URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA } = req.body;
+    const { URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA } = req.body.data;
     
     if (!ID_ALUNO || !ID_PROVA || !URL || !ERRO || !ACERTOS || !NOTA) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -82,9 +112,9 @@ app.post('/resultados', async (req, res) => {
   }
 });
 
-app.post('/provas', async (req, res) => {
+app.post('/api/provas', async (req, res) => {
   try {
-    const { ID_PROVA, GABARITO } = req.body;
+    const { ID_PROVA, GABARITO } = req.body.data;
     
     if (!ID_PROVA || !GABARITO) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -99,10 +129,10 @@ app.post('/provas', async (req, res) => {
   }
 });
 
-app.put('/participantes/:id_aluno', async (req, res) => {
+app.put('/api/participantes/:id_aluno', async (req, res) => {
   try {
     const { id_aluno } = req.params;
-    const { NOME, ESCOLA } = req.body;
+    const { NOME, ESCOLA } = req.body.data;
     
     if (!NOME || !ESCOLA) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -120,10 +150,10 @@ app.put('/participantes/:id_aluno', async (req, res) => {
   }
 });
 
-app.put('/resultados/:id_aluno/:id_prova', async (req, res) => {
+app.put('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
   try {
     const { id_aluno, id_prova } = req.params;
-    const { URL, ERRO, ACERTOS, NOTA } = req.body;
+    const { URL, ERRO, ACERTOS, NOTA } = req.body.data;
     
     if (!URL||!ERRO ||!ACERTOS || !NOTA) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -141,10 +171,11 @@ app.put('/resultados/:id_aluno/:id_prova', async (req, res) => {
   }
 });
 
-app.put('/provas/:id_prova', async (req, res) => {
+app.put('/api/provas/:id_prova', async (req, res) => {
   try {
     const { id_prova } = req.params;
-    const { GABARITO } = req.body;
+    const GABARITO = req.body.data.GABARITO;
+    console.log(id_prova, GABARITO, req.body.data);
     
     if (!GABARITO || !id_prova) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
@@ -162,7 +193,7 @@ app.put('/provas/:id_prova', async (req, res) => {
   }
 });
 
-app.delete('/participantes/:id_aluno', async (req, res) => {
+app.delete('/api/participantes/:id_aluno', async (req, res) => {
   try {
     const { id_aluno } = req.params;
     
@@ -178,7 +209,7 @@ app.delete('/participantes/:id_aluno', async (req, res) => {
   }
 });
 
-app.delete('/resultados/:id_aluno', async (req, res) => {
+app.delete('/api/resultados/:id_aluno', async (req, res) => {
   try {
     const { id_aluno } = req.params;
     
@@ -194,7 +225,7 @@ app.delete('/resultados/:id_aluno', async (req, res) => {
   }
 });
 
-app.delete('/provas/:id_prova', async (req, res) => {
+app.delete('/api/provas/:id_prova', async (req, res) => {
   try {
     const { id_prova } = req.params;
     
@@ -211,7 +242,7 @@ app.delete('/provas/:id_prova', async (req, res) => {
 });
 
 // Rota que recebe várias imagens
-app.post('/processar-varias', upload.array('imagens'), (req, res) => {
+app.post('/api/processar-varias', upload.array('imagens'), (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
         return res.status(400).send({ erro: 'Nenhuma imagem enviada' });
@@ -229,9 +260,9 @@ app.post('/processar-varias', upload.array('imagens'), (req, res) => {
 });
 
 // Rota para processar imagem a partir do path
-app.post('/processar-path', async (req, res) => {
+app.post('/api/processar-path', async (req, res) => {
   try {
-    const { caminho } = req.body;
+    const { caminho } = req.body.data;
     if (!caminho) {
       return res.status(400).json({ erro: 'Campo "caminho" é obrigatório' });
     }
@@ -246,7 +277,7 @@ app.post('/processar-path', async (req, res) => {
   }
 });
 
-app.post('/avaliar',async(req,res) =>{
+app.post('/api/avaliar',async(req,res) =>{
   //recebe o id da prova e as respostas   
   //exemplo de corpo da requisição:
   //      id_participante: 12345,
@@ -254,7 +285,7 @@ app.post('/avaliar',async(req,res) =>{
   //      leitura:  "abddeab?deabcde"
 
 
-      const { id_prova,id_participante,leitura } = req.body;
+      const { id_prova,id_participante,leitura } = req.body.data;
   if (!id_participante || !leitura) {
     return res.status(400).json({ erro: 'Dados insuficientes para avaliação' });
   }
@@ -277,11 +308,6 @@ if (!gabarito) {
   });
   
 })
-//TODO:fazer endpoint para retornar tabela do banco de dados 
-
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
 
 export default app;
 

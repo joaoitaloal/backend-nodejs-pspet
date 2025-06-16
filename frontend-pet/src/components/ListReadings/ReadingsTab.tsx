@@ -44,7 +44,7 @@ function ReadingsTab(props: ReadingsTabProps){
             {
                 props.readings.filter((reading) =>{
                     if(searchText == "") return true;
-                    else return reading.id == parseInt(searchText);
+                    else return reading.ID_ALUNO == parseInt(searchText);
                 }).map((reading, index) => {
                     return(
                         <div key={`list-item${index}`}>
@@ -62,7 +62,7 @@ function ReadingsTab(props: ReadingsTabProps){
                                 }
                             }}/>
                             <div className="reading-item" key={`reading${index}`} onClick={() => props.setCurReading(reading)}>
-                                <p>Leitura: {reading.image_url}</p>
+                                <p>Leitura: {reading.IMAGE_URL}</p>
                             </div>
                         </div>
 

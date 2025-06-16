@@ -1,19 +1,20 @@
 export interface Reading{
-    erro: number,
-    id: number, //id aluno
-    id_prova: number,
-    nota: number,
-    leitura: string,
-    image_url: string
+    ERRO: number,
+    ID_ALUNO: number,
+    ID_PROVA: number,
+    NOTA: number,
+    ACERTOS: number,
+    LEITURA: string,
+    IMAGE_URL: string
 }
 
 export interface Prova{
-    id: number,
-    gabarito: string
+    ID_PROVA: number,
+    GABARITO: string
 }
 
 export interface Aluno{
-    id: number,
-    nome: string,
-    escola: string
+    ID_ALUNO: number,
+    NOME: string,
+    ESCOLA: string
 }

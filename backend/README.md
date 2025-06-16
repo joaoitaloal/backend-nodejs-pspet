@@ -19,3 +19,8 @@ ou
 node server.js
 ```
 Para iniciar o servidor.
+
+
+##
+
+npm install -g node-gyp precisa estar instalado globalmente

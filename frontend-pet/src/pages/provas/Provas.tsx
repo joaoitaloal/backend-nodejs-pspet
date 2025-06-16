@@ -10,24 +10,28 @@ function Provas(){
     useEffect(() =>{
         axios.request({
             method: 'get',
-            url: '/api/get-provas',
+            url: '/api/provas',
         })
         .then((res) =>{
-            let newProvas = res.data.provas; //creio que isso já vai ser um array
-            setProvas(newProvas);
+            let newProvas = res.data.message; //creio que isso já vai ser um array
+            if(newProvas.length <= 0) setWarning('Nenhum registro encontrado no banco de dados')
+            else setProvas(newProvas);
         })
-        .catch((err) =>{ setWarning(err) })
+        .catch((err) =>{ console.log(err) })
     }, []);
 
     function updateProvas(newProvas: Array<Prova>){
-        setProvas(newProvas)
+        setProvas(newProvas);
     }
 
     function MainPage(){
 
         if(provas == undefined || !provas || provas.length <= 0){
             return (
-                <p>{warning}</p>
+                <div>
+                    <p>{warning}</p>
+                    <button onClick={() => updateProvas([{ GABARITO: '000000000000000000000', ID_PROVA: 0 } as Prova])}>Adicionar prova localmente</button>
+                </div>
             )
         }else{
             return (

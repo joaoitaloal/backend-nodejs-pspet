@@ -25,6 +25,13 @@ function App() {
         char* leitura: a, b, c...: o item marcado (exemplo: abbaccdeea0?), 0: questão em branco e ?: mais de uma marcação
     */
 
+        /* Falta: 
+            - Testar requisições pro backend
+            - Fazer feedback para as requisições
+            - Fazer um loadingzinho para as requisições
+            - Creio que só
+        */
+
     const [readings, setReadings] = useState(new Array<Reading>);
 
     function updateReadings(newReadings: Array<Reading>){

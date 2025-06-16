@@ -5,13 +5,17 @@ interface GenericTabProps{
     setCurItem: (item: any) => void;
     deleteItem: (itens: Array<any>) => void;
     addItem: () => void;
-    saveDatabase: (itens: Array<any>) => void;
-    deleteDatabase: (itens: Array<any>) => void;
 }
 
 function GenericTab(props: GenericTabProps){
     const [selectedItens, setSelectedItens] = useState(new Set<any>);
     const [searchText, setSearchText] = useState("");
+    
+    function getID(item: any){
+        if(item.ID_ALUNO != undefined) return item.ID_ALUNO;
+        else if(item.ID_PROVA != undefined) return item.ID_PROVA;
+        else return null;
+    }
 
     return(
         <div id="readings-tab"> {/* Separar isso num arquivo pra fazer state com selecionadas e tal */}
@@ -34,7 +38,9 @@ function GenericTab(props: GenericTabProps){
             {
                 props.itens.filter((item) =>{
                     if(searchText == "") return true;
-                    else return item.id == parseInt(searchText);
+                    else{
+                        return getID(item) == parseInt(searchText);
+                    }
                 }).map((reading, index) => {
                     return(
                         <div key={`list-item${index}`}>
@@ -52,7 +58,7 @@ function GenericTab(props: GenericTabProps){
                                 }
                             }}/>
                             <div className="reading-item" key={`reading${index}`} onClick={() => props.setCurItem(reading)}>
-                                <p>Item: {reading.id}</p>
+                                <p>Item: {getID(reading)}</p>
                             </div>
                         </div>
 
@@ -67,8 +73,6 @@ function GenericTab(props: GenericTabProps){
                         if(element && !element.checked) element.click();
                     }
                 }}>Selecionar todas</button>
-                <button onClick={() => props.saveDatabase(Array.from(selectedItens))}>Salvar selecionadas no banco</button>
-                <button onClick={() => props.deleteDatabase(Array.from(selectedItens))}>Deletar selecionadas no banco</button>
                 <button onClick={props.addItem}>Adicionar novo item localmente</button>
                 <button onClick={() =>{
                     for(let i = 0; i < props.itens.length; i++){
