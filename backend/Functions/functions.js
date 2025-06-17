@@ -77,7 +77,7 @@ function delete_participante(ID_ALUNO) {
         console.error(err.message);
         reject(err);
       } else {
-        if (this.changes === 0){ //this.changes retorna o numero de linhas que foram alteradas na tabela dentro da chamada do db.run
+        if (this.changes == 0){ //this.changes retorna o numero de linhas que foram alteradas na tabela dentro da chamada do db.run
           const notFoundError = new Error(`Participante com ID ${ID_ALUNO} não existe`);
           notFoundError.code = 'PARTICIPANTE_NOT_FOUND';
           reject(notFoundError);
@@ -183,7 +183,7 @@ function update_participante(ID_ALUNO, NOME, ESCOLA) {
       } else {
         if (this.changes == 0){ //this.changes retorna o numero de linhas que foram alteradas na tabela dentro da chamada do db.run
           const notFoundError = new Error(`Participante com ID ${ID_ALUNO} não existe`);
-          notFoundError.code = 'PROVA_NOT_FOUND';
+          notFoundError.code = 'PARTICIPANTE_NOT_FOUND';
           reject(notFoundError);
         }else{
         console.log(`Participante com ID ${ID_ALUNO} atualizado com sucesso.`);

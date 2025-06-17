@@ -220,13 +220,13 @@ app.put('/api/participantes/:id_aluno', async (req, res) => {
 app.put('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
   try {
     const { id_aluno, id_prova } = req.params;
-    const { URL, ERRO, ACERTOS, NOTA } = req.body.data;
+    const { IMAGE_URL, ERRO, ACERTOS, NOTA } = req.body.data;
     
-    if (URL == undefined || ERRO == undefined || ACERTOS== undefined || NOTA == undefined) {
+    if (IMAGE_URL == undefined || ERRO == undefined || ACERTOS== undefined || NOTA == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await update_resultado(URL, ERRO, id_aluno, id_prova, ACERTOS, NOTA)
+    await update_resultado(IMAGE_URL, ERRO, id_aluno, id_prova, ACERTOS, NOTA)
     .then(() =>{
       res.json({ message: 'Resultado atualizado com sucesso' });
     })
