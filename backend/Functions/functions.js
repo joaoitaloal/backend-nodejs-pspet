@@ -110,15 +110,15 @@ function delete_prova(ID_PROVA) {
   });
 }
 
-function delete_resultado(ID_ALUNO) {
+function delete_resultado(ID_ALUNO, ID_PROVA) {
   return new Promise((resolve, reject) => {
-    db.run('DELETE FROM Resultados WHERE ID_ALUNO = ?', [ID_ALUNO], function(err) {
+    db.run('DELETE FROM Resultados WHERE ID_ALUNO = ? AND ID_PROVA = ?', [ID_ALUNO, ID_PROVA], function(err) {
       if (err) {
         console.error(err.message);
         reject(err);
       } else {
         if (this.changes == 0){ //this.changes retorna o numero de linhas que foram alteradas na tabela dentro da chamada do db.run
-          const notFoundError = new Error(`Resultado com ID ${ID_ALUNO} não existe`);
+          const notFoundError = new Error(`Resultado com ID do aluno ${ID_ALUNO} e ID da prova ${ID_PROVA} não existe`);
           notFoundError.code = 'RESULTADO_NOT_FOUND';
           reject(notFoundError);
         }else{
@@ -222,7 +222,7 @@ function update_resultado(URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA) {
         reject(err);
       } else {
         if (this.changes == 0){ //this.changes retorna o numero de linhas que foram alteradas na tabela dentro da chamada do db.run
-          const notFoundError = new Error(`Resultado com ID ${ID_ALUNO} não existe`);
+          const notFoundError = new Error(`Resultado com ID do aluno ${ID_ALUNO} e ID da prova ${ID_PROVA} não existe`);
           notFoundError.code = 'RESULTADO_NOT_FOUND';
           reject(notFoundError);
         }else{

@@ -11,23 +11,6 @@ import {select_resultados, select_provas, select_prova, select_participantes,
         insert_prova, insert_resultado, update_participante, update_prova,
         update_resultado} from "../Functions/functions.js"
 
-
-const gabarito1 = 'eaedddccaedacbbcbacb';
-const gabarito2 = 'bdbbacbbaeececddbdcd';
-const gabarito3 = 'abecadcbbcedccabccda';
-const gabarito4 = 'baadcaeeacabcdbccade';
-const gabarito5 = 'ddddbddcdcacbbecaaed';
-const gabarito6 = 'caeabbdecbcecaddaecd';
-
-const gabaritos = {
-  '1': gabarito1,
-  '2': gabarito2,
-  '3': gabarito3,
-  '4': gabarito4,
-  '5': gabarito5,
-  '6': gabarito6
-};// objeto para armazenar os gabaritos de cada prova
-
 let cur_id_imagem = 0;
 
 const app = express();
@@ -288,11 +271,11 @@ app.delete('/api/participantes/:id_aluno', async (req, res) => {
   }
 });
 
-app.delete('/api/resultados/:id_aluno', async (req, res) => {
+app.delete('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
   try {
-    const { id_aluno } = req.params;
+    const { id_aluno, id_prova } = req.params;
     
-    await delete_resultado(id_aluno);
+    await delete_resultado(id_aluno, id_prova);
     res.json({ message: 'Resultado removido com sucesso' });
 
   } catch (error) {
