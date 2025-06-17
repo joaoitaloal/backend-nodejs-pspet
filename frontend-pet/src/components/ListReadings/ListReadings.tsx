@@ -3,22 +3,21 @@ import type { Reading } from "../../lib/interfaces.ts";
 import './listreadings.css'
 import { deleteLeituraDatabase, ID_ERROS, replaceCharAt, saveLeituraDatabase, saveNewLeituraDatabase } from "../../lib/utils.ts";
 import ReadingsTab from "./ReadingsTab.tsx";
-import axios from "axios";
-
+ 
 interface ListReadingsProps{
     readings: Array<Reading>;
     updateReadings: (reading: Array<Reading>) => void;
 }
-
+ 
 function ListReadings(props: ListReadingsProps){
     const [curReading, setCurReading] = useState(props.readings[0]);
     let tempReading = Object.assign({}, curReading);
-
+ 
     function deleteReadings(toDelete: Array<Reading>){
         toDelete.forEach((reading) =>{
             props.readings.splice(props.readings.indexOf(reading), 1);
         })
-
+ 
         if(props.readings.length > 0) {
             setCurReading(props.readings[0]);
             props.updateReadings(props.readings);
@@ -27,7 +26,7 @@ function ListReadings(props: ListReadingsProps){
             props.updateReadings(new Array<Reading>);
         }
     }
-
+ 
     function CurrentReading(){
         if(curReading != undefined){
             return(
@@ -82,20 +81,10 @@ function ListReadings(props: ListReadingsProps){
                     </div>
                     <div id="readings-buttons">
                             <button type="submit" onClick={() => {
-                                axios.post('/avaliar', {
-                                    id_prova: tempReading.ID_PROVA,
-                                    id_participante: tempReading.ID_ALUNO,
-                                    leitura: tempReading.LEITURA
-                                })
-                                .then((res) =>{
-                                    tempReading.NOTA = res.data.nota;
-
-                                    props.readings[props.readings.indexOf(curReading)] = tempReading;
-
-                                    setCurReading(tempReading);
-                                    props.updateReadings(props.readings);
-                                })
-                                .catch((err) => console.log(err));
+                                props.readings[props.readings.indexOf(curReading)] = tempReading;
+ 
+                                setCurReading(tempReading);
+                                props.updateReadings(props.readings);
                             }}>Salvar localmente</button>
                             <button onClick={() =>{
                                 saveNewLeituraDatabase(curReading, '/api/resultados');
@@ -116,7 +105,7 @@ function ListReadings(props: ListReadingsProps){
         }
         else return <div id="current-reading"><p>Nenhuma leitura carregada.</p></div>;
     }
-
+ 
     return (
         <>
             <CurrentReading/>
@@ -124,5 +113,6 @@ function ListReadings(props: ListReadingsProps){
         </>
     )
 }
-
+ 
 export default ListReadings;
+ 
