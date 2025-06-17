@@ -145,7 +145,7 @@ app.post('/api/participantes', async (req, res) => {
   try {
     const { ID_ALUNO, NOME, ESCOLA } = req.body.data;
     
-    if (!ID_ALUNO || !NOME || !ESCOLA) {
+    if (ID_ALUNO == undefined || NOME == undefined || ESCOLA == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
@@ -179,7 +179,7 @@ app.post('/api/provas', async (req, res) => {
   try {
     const { ID_PROVA, GABARITO } = req.body.data;
     
-    if (!ID_PROVA || !GABARITO) {
+    if (ID_PROVA == undefined || GABARITO == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
@@ -197,7 +197,7 @@ app.put('/api/participantes/:id_aluno', async (req, res) => {
     const { id_aluno } = req.params;
     const { NOME, ESCOLA } = req.body.data;
     
-    if (!NOME || !ESCOLA) {
+    if (NOME == undefined || ESCOLA == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
@@ -218,7 +218,7 @@ app.put('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
     const { id_aluno, id_prova } = req.params;
     const { URL, ERRO, ACERTOS, NOTA } = req.body.data;
     
-    if (!URL||!ERRO ||!ACERTOS || !NOTA) {
+    if (URL == undefined || ERRO == undefined || ACERTOS== undefined || NOTA == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
@@ -239,7 +239,7 @@ app.put('/api/provas/:id_prova', async (req, res) => {
     const { id_prova } = req.params;
     const GABARITO = req.body.data.GABARITO;
     
-    if (!GABARITO || !id_prova) {
+    if (GABARITO == undefined || id_prova == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
@@ -348,8 +348,8 @@ app.post('/api/avaliar',async(req,res) =>{
 
 
     const { id_prova,id_participante,leitura } = req.body.data;
-  if (!id_participante || !leitura) {
-    return res.status(400).json({ erro: 'Dados insuficientes para avaliação' });
+  if (id_participante == undefined || leitura == undefined) {
+    return res.status(400).json({ erro: 'Bad Request: Campos faltando' });
   }
   const { nota, acertos } = await avaliarLeitura(leitura, id_prova)
   //agora,falta salvar no banco de dados, passando arquivo, o id_participante,id prova,o erro, a  leitura, os acertos e a nota
