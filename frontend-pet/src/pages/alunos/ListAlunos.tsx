@@ -66,6 +66,7 @@ function ListProvas(props: ListAlunosProps){
                             }}/>
                         </div>
                     </div>
+                    <p style={{textAlign: 'center'}}>Lembre-se de salvar localmente antes de fazer operações no banco de dados!</p>
                     <div id="readings-buttons">
                         <button type="submit" onClick={() => {
                             props.alunos[props.alunos.indexOf(curAluno)] = tempAluno;

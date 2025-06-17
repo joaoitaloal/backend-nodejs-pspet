@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "export LD_LIBRARY_PATH=./ && node server.js"
   },
   "author": "João Ítalo",
   "license": "MIT",

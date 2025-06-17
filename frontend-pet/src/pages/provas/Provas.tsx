@@ -28,7 +28,7 @@ function Provas(){
 
         if(provas == undefined || !provas || provas.length <= 0){
             return (
-                <div>
+                <div id="warning">
                     <p>{warning}</p>
                     <button onClick={() => updateProvas([{ GABARITO: '000000000000000000000', ID_PROVA: 0 } as Prova])}>Adicionar prova localmente</button>
                 </div>

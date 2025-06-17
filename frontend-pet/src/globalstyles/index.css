@@ -38,3 +38,32 @@ body{
     gap: 2px;
     padding: 5px;
 }
+
+#warning{
+    border-radius: 15px;
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px black;
+
+    padding: 10px;
+
+    background-color: #9BA2FF;
+    color: black;
+
+    height: 20%;
+    margin: auto;
+}
+
+#warning > button{
+    background-color: #454770;
+    color: white;
+
+    border-radius: 10px;
+    border: 2px solid #c4c4d6;
+
+    box-shadow: 1px 1px 5px black;
+}
+#warning > button:hover{
+    background-color: #212236;
+    
+    box-shadow: inset 0px 0px 10px white;
+}

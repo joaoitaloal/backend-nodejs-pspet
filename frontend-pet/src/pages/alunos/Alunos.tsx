@@ -28,7 +28,7 @@ function Alunos(){
 
         if(alunos == undefined || !alunos || alunos.length <= 0){
             return (
-                <div>
+                <div id="warning">
                     <p>{warning}</p>
                     <button onClick={() => updateAlunos([{ESCOLA: "", NOME: "", ID_ALUNO: 0} as Aluno])}>Adicionar aluno localmente</button>
                 </div>

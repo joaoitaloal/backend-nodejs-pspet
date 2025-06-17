@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Reading } from "../../lib/interfaces.ts";
 import '../../globalstyles/listreadings.css';
 import GenericTab from "../../components/ListarGenerico.tsx";
-import { deleteLeituraDatabase, ID_ERROS, replaceCharAt, saveLeituraDatabase, saveNewLeituraDatabase } from "../../lib/utils.ts";
+import { deleteLeituraDatabase, ID_ERROS, saveLeituraDatabase, saveNewLeituraDatabase } from "../../lib/utils.ts";
 
 interface ListLeiturasProps{
     leituras: Array<Reading>;
@@ -69,29 +69,7 @@ function ListLeitura(props: ListLeiturasProps){
                             <input type="text" id="error-input" name="error-input" value={curLeitura.ERRO + ' - ' + ID_ERROS.get(curLeitura.ERRO)}/>
                         </div>
                     </div>
-                    <div id="readings-inputs">
-                        <h3>Gabarito: {curLeitura.LEITURA}</h3>
-                        <div id="gabarito">
-                            {
-                                Array.from(curLeitura.LEITURA).map((char, index) =>{
-                                    return(
-                                        <div className="center-item" key={`item${index+1}`}>
-                                            <label htmlFor={`choice${index+1}`}>{index+1 < 10?'0'+(index+1):index+1}</label>
-                                            <select id={`choice${index+1}`} name={`choice${index+1}`} defaultValue={char} onChange={(e) => (tempLeitura.LEITURA = replaceCharAt(tempLeitura.LEITURA, index, e.target.value))}>
-                                                <option value="a">a</option>
-                                                <option value="b">b</option>
-                                                <option value="c">c</option>
-                                                <option value="d">d</option>
-                                                <option value="e">e</option>
-                                                <option value="0">0</option>
-                                                <option value="?">?</option>
-                                            </select>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
+                    <p style={{textAlign: 'center'}}>Lembre-se de salvar localmente antes de fazer operações no banco de dados!</p>
                     <div id="readings-buttons">
                             <button type="submit" onClick={() => {
                                 props.leituras[props.leituras.indexOf(curLeitura)] = tempLeitura;

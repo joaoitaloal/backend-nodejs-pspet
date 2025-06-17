@@ -6,7 +6,7 @@ import { extname } from 'path';
 import { promisify } from 'util';
 import { exec } from 'child_process';
 
-import {select_resultados, select_provas, select_participantes,
+import {select_resultados, select_provas, select_prova, select_participantes,
         delete_participante, delete_prova, delete_resultado, insert_participante,
         insert_prova, insert_resultado, update_participante, update_prova,
         update_resultado} from "../Functions/functions.js"
@@ -48,36 +48,81 @@ function processarImagem(buffer, originalname) { //função q recebe um buffer e
   return resultado;
 }
 
+async function avaliarLeitura(leitura, ID_PROVA){
+  const prova = await select_prova(ID_PROVA)
+  
+  if(prova.length <= 0) return {nota: -1, acertos: -1}
+
+  const gabarito = prova[0].GABARITO
+ 
+  let acertos = 0;
+  for(let i =0; i < gabarito.length && i < leitura.length; i++){
+    if(gabarito[i] === leitura[i]) acertos++;
+  }
+  const nota = (acertos / gabarito.length) * 10;
+
+  return {nota: nota, acertos: acertos}
+}
+
 app.get('/', (req, res) =>{
-    res.sendFile( './dist/index.html');
+    res.sendFile( 'index.html', {root: `./dist`});
 })
 
 const execFilePromisse = promisify(exec);
-app.post('/api/processar-imagens', upload.array('imagens'), (req, res) =>{
+app.post('/api/processar-imagens', upload.array('imagens'), async (req, res) =>{
   let files = req.files;
   if(files == null || files == undefined) res.status(400).send('Requisição mal formatada');
 
   let response = [];
 
-  files.forEach((file) =>{
+  const promises = files.map(async(file) =>{
     cur_id_imagem++;
     let id = cur_id_imagem;
     let pathProcessamento = './lib/processamento'; // caminho pra processamento.cpp compilado
     let pathImage = './imagens/imagem'+id+'.png'; // caminho pra imagem
 
-    // Basicamente salva cada imagem em disco, chama o programa pra ler ela e manda o stdout como resposta(num array)
-    fsp.writeFile(pathImage, Buffer.from(file.buffer))
-    .then(() =>{
-      execFilePromisse(`cd ${pathProcessamento} && ./processamento ../../${pathImage}`)
-      .then((result) => {
-        response.push(JSON.parse(result.stdout));
+    return new Promise((resolve, reject) =>{
+      // Basicamente salva cada imagem em disco, chama o programa pra ler ela e manda o stdout como resposta(num array)
+      fsp.writeFile(pathImage, Buffer.from(file.buffer))
+      .then(() =>{
+        execFilePromisse(`cd ${pathProcessamento} && ./processamento ../../${pathImage}`)
+        .then(async (result) => {
+          let stdout = JSON.parse(result.stdout)
+          let nota = -1
+          let acertos = -1;
+          if(stdout.erro == 0){
+            let avaliacao = await avaliarLeitura(stdout.leitura, stdout.id_prova)
+            nota = avaliacao.nota
+            acertos = avaliacao.acertos
+          } 
+
+          response.push({ stdout: stdout, IMAGE_URL: file.originalname, nota: nota, acertos: acertos});
+          resolve()
+        })
+        .catch((err) =>{
+          console.log(err);
+          reject()
+        })
       })
-      .catch((err) =>{
-        console.log(err);
-      })
+      .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
   })
+
+  await Promise.all(promises)
+
+  response = response.map((leitura) =>{
+    return JSON.stringify({
+      ERRO: leitura.stdout.erro,
+      ID_ALUNO: leitura.stdout.id_participante,
+      ID_PROVA: leitura.stdout.id_prova,
+      NOTA: leitura.nota,
+      ACERTOS: leitura.acertos,
+      LEITURA: leitura.stdout.leitura,
+      IMAGE_URL: leitura.IMAGE_URL
+    })
+  })
+
+  //console.log(`response `+response)
 
   res.json({ message: response });
 
@@ -134,13 +179,13 @@ app.post('/api/participantes', async (req, res) => {
 
 app.post('/api/resultados', async (req, res) => {
   try {
-    const { URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA } = req.body.data;
+    const { IMAGE_URL, ERRO, ID_ALUNO, ID_PROVA, ACERTOS, NOTA } = req.body.data;
     
-    if (!ID_ALUNO || !ID_PROVA || !URL || !ERRO || !ACERTOS || !NOTA) {
+    if (ID_ALUNO == undefined || ID_PROVA == undefined || IMAGE_URL == undefined || ERRO == undefined || ACERTOS == undefined || NOTA == undefined) {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await insert_resultado(URL || null, ERRO || null, ID_ALUNO, ID_PROVA, ACERTOS, NOTA);
+    await insert_resultado(IMAGE_URL || null, ERRO || null, ID_ALUNO, ID_PROVA, ACERTOS, NOTA);
     res.status(201).json({ message: 'Resultado adicionado com sucesso' });
 
   } catch (error) {
@@ -322,19 +367,11 @@ app.post('/api/avaliar',async(req,res) =>{
   //      leitura:  "abddeab?deabcde"
 
 
-      const { id_prova,id_participante,leitura } = req.body.data;
+    const { id_prova,id_participante,leitura } = req.body.data;
   if (!id_participante || !leitura) {
     return res.status(400).json({ erro: 'Dados insuficientes para avaliação' });
   }
-const gabarito = gabaritos[id_prova];
-if (!gabarito) {
-  return res.status(400).json({ erro: 'Prova inválida' });
-}
-  let acertos = 0;
-  for(let i =0;i<gabarito.length && i<leitura.length;i++){
-    if(gabarito[i] === leitura[i]) acertos++;
-  }
-  const nota = (acertos / gabarito.length) * 10;
+  const { nota, acertos } = await avaliarLeitura(leitura, id_prova)
   //agora,falta salvar no banco de dados, passando arquivo, o id_participante,id prova,o erro, a  leitura, os acertos e a nota
  res.json({
     id_prova,

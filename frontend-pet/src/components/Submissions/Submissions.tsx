@@ -10,6 +10,7 @@ interface SubmissionsProps{
 
 function Submissions(props: SubmissionsProps){
     const [files, setFiles] = useState(new Array<File>);
+    const [status, setStatus] = useState(`Enviar`)
     // Fazer só aceitar png/jpeg(o que a biblioteca suportar)
 
     function onFilesChanged(files: FileList){
@@ -26,45 +27,29 @@ function Submissions(props: SubmissionsProps){
     function submitFiles(){
         let formData = new FormData();
         files.forEach((file) => formData.append('imagens', file))
+        setStatus("Processando resposta")
 
         axios.post('/api/processar-imagens', formData)
         .then((res) =>{
-            props.updateReadings(res.data.leituras);
+                console.log(res.data)
+            let result = res.data.message.map((leitura: any) =>{
+                let leituraOBJ = JSON.parse(leitura)
+                return { 
+                    ACERTOS: leituraOBJ.ACERTOS,
+                    ERRO: leituraOBJ.ERRO,
+                    ID_ALUNO: leituraOBJ.ID_ALUNO,
+                    ID_PROVA: leituraOBJ.ID_PROVA,
+                    IMAGE_URL: leituraOBJ.IMAGE_URL,
+                    LEITURA: leituraOBJ.LEITURA,
+                    NOTA: leituraOBJ.NOTA
+                 } as Reading
+            })
+            props.updateReadings(result);
         })
-
-        /*props.updateReadings([{ testing
-            erro: 2,
-            id: 1,
-            id_prova: 6,
-            nota: 1,
-            leitura: 'a0bedabdbcc0eebacbca',
-            image_url: '0001.png'
-        },
-        {
-            erro: 0,
-            id: 3,
-            id_prova: 3,
-            nota: 2.5,
-            leitura: '?0d?0ecaaccaacdecaca',
-            image_url: '0007.png'
-        },
-        {
-            erro: 0,
-            id: 3,
-            id_prova: 3,
-            nota: 2.5,
-            leitura: '?0d?0ecaaccaacdecaca',
-            image_url: '0008.png'
-        },
-        {
-            erro: 0,
-            id: 3,
-            id_prova: 3,
-            nota: 2.5,
-            leitura: '?0d?0ecaaccaacdecaca',
-            image_url: '0009.png'
-        }
-        ]);*/
+        .catch((err) => {
+            setStatus("Algo deu errado, olhe o console")
+            console.error(err)
+        })
     }
 
     return (
@@ -85,7 +70,7 @@ function Submissions(props: SubmissionsProps){
                     }
                 </div>
             </div>
-            <button onClick={submitFiles} id='submit-files'>Enviar</button>
+            <button onClick={submitFiles} id='submit-files'>{status}</button>
         </div>
     )
 }

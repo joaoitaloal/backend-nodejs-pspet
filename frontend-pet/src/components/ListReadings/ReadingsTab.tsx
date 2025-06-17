@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Reading } from "../../lib/interfaces.ts";
-import axios from "axios";
 
 interface ReadingsTabProps{
     readings: Array<Reading>;
@@ -11,17 +10,6 @@ interface ReadingsTabProps{
 function ReadingsTab(props: ReadingsTabProps){
     const [selectedReadings, setSelectedReadings] = useState(new Set<Reading>);
     const [searchText, setSearchText] = useState("");
-
-    function saveSelected(){
-        axios.post('/api/save-readings',
-            {
-                readings: Array.from(selectedReadings)
-            }
-        )
-
-        props.deleteReadings(Array.from(selectedReadings));
-        setSelectedReadings(new Set<Reading>);
-    }
 
     return(
         <div id="readings-tab"> {/* Separar isso num arquivo pra fazer state com selecionadas e tal */}
@@ -77,7 +65,6 @@ function ReadingsTab(props: ReadingsTabProps){
                         if(element && !element.checked) element.click();
                     }
                 }}>Selecionar todas</button>
-                <button onClick={saveSelected}>Salvar selecionadas no banco</button>
                 <button onClick={() =>{
                     for(let i = 0; i < props.readings.length; i++){
                         let element = (document.getElementById(`checkbox-reading${i}`) as HTMLInputElement);

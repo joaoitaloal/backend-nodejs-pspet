@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Reading } from "../../lib/interfaces.ts";
 import './listreadings.css'
-import { ID_ERROS, replaceCharAt } from "../../lib/utils.ts";
+import { deleteLeituraDatabase, ID_ERROS, replaceCharAt, saveLeituraDatabase, saveNewLeituraDatabase } from "../../lib/utils.ts";
 import ReadingsTab from "./ReadingsTab.tsx";
 import axios from "axios";
 
@@ -97,6 +97,19 @@ function ListReadings(props: ListReadingsProps){
                                 })
                                 .catch((err) => console.log(err));
                             }}>Salvar localmente</button>
+                            <button onClick={() =>{
+                                saveNewLeituraDatabase(curReading, '/api/resultados');
+                            }}>Salvar novo registro no banco de dados</button>
+                            <button onClick={() =>{
+                                saveLeituraDatabase(curReading, '/api/resultados');
+                            }}>Salvar no banco de dados</button>
+                            <button onClick={() =>{
+                                deleteLeituraDatabase(curReading, '/api/resultados')
+                                .then(() =>{
+                                    deleteReadings([curReading]);
+                                })
+                                .catch((err) => console.log(err))
+                            }}>Deletar no banco de dados</button>
                     </div>
                 </div>
             )

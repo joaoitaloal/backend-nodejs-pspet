@@ -37,6 +37,22 @@ function select_provas() {
   });
 }
 
+export function select_prova(ID_PROVA) {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM Provas WHERE ID_PROVA = ?', [ID_PROVA], (err, rows) => {
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      } else {
+        rows.forEach((row) => {
+          console.log(row);
+        });
+        resolve(rows);
+      }
+    });
+  });
+}
+
 function select_participantes() {
   return new Promise((resolve, reject) => {
     db.all('SELECT * FROM Participantes', [], (err, rows) => {
