@@ -138,7 +138,7 @@ function insert_participante(ID_ALUNO, NOME, ESCOLA, ) {
         console.error(err.message);
         reject(err);
       } else {
-        console.log(`Participante ${NOME} inserido com sucesso.`);
+        console.log(`Participante com ID ${ID_ALUNO} inserido com sucesso.`);
         resolve(this.lastID);
       }
     });

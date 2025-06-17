@@ -201,13 +201,17 @@ app.put('/api/participantes/:id_aluno', async (req, res) => {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await update_participante(id_aluno, NOME, ESCOLA);
-    res.json({ message: 'Participante atualizado com sucesso' });
+    await update_participante(id_aluno, NOME, ESCOLA)
+    .then(() =>{
+      res.json({ message: 'Participante atualizado com sucesso' });
+    })
+    .catch((err) =>{ 
+      if (err.code === 'PARTICIPANTE_NOT_FOUND') {
+        return res.status(404).json({ error: err.message });
+      }
+    })
 
   } catch (error) {
-    if (error.code === 'PARTICIPANTE_NOT_FOUND') {
-      return res.status(404).json({ error: error.message });
-    }
     console.error('Erro ao atualizar participante:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
@@ -222,13 +226,17 @@ app.put('/api/resultados/:id_aluno/:id_prova', async (req, res) => {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await update_resultado(URL, ERRO, id_aluno, id_prova, ACERTOS, NOTA);
-    res.json({ message: 'Resultado atualizado com sucesso' });
+    await update_resultado(URL, ERRO, id_aluno, id_prova, ACERTOS, NOTA)
+    .then(() =>{
+      res.json({ message: 'Resultado atualizado com sucesso' });
+    })
+    .catch((err) =>{ 
+      if (err.code === 'RESULTADO_NOT_FOUND') {
+        return res.status(404).json({ error: err.message });
+      }
+    })
 
   } catch (error) {
-    if (error.code === 'RESULTADO_NOT_FOUND') {
-      return res.status(404).json({ error: error.message });
-    }
     console.error('Erro ao atualizar resultado:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
@@ -243,13 +251,17 @@ app.put('/api/provas/:id_prova', async (req, res) => {
       return res.status(400).json({ error: 'Bad Request: Campos faltando' });
     }
 
-    await update_prova(id_prova, GABARITO);
-    res.json({ message: 'Prova atualizada com sucesso' });
+    await update_prova(id_prova, GABARITO)
+    .then(() =>{
+      res.json({ message: 'Prova atualizada com sucesso' });
+    })
+    .catch((err) =>{ 
+      if (err.code === 'PROVA_NOT_FOUND') {
+        return res.status(404).json({ error: err.message });
+      }
+    })
 
   } catch (error) {
-    if (error.code === 'PROVA_NOT_FOUND') {
-      return res.status(404).json({ error: error.message });
-    }
     console.error('Erro ao atualizar prova:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
